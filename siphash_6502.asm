@@ -2,23 +2,48 @@
 //
 // siphash_6502.asm
 // ----------------
-// Implementation of the SipHash_2_4 function in MOS 6502 asm.
+// Implementation of the SipHash_2_4 function in MOS 6502 asembler.
 // Why? Because we can.
 //
 // Build:
-// java -jar ~/bin/KickAssembler/KickAss.jar siphash_6502.asm
+// java -jar KickAss.jar siphash_6502.asm
 // 
 // Run:
-// ~/bin/vice/x64.app/Contents/MacOS/x64 siphash_6502.prg
+// ./x64 siphash_6502.prg
 //
 //
-// (c) 2013 Secworks Sweden AB && FairLight
-// Joachim Strömbergson
+// Copyright (c) 2013, Secworks Sweden AB
+// All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or
+// without modification, are permitted provided that the following
+// conditions are met:
+//
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+//
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in
+//    the documentation and/or other materials provided with the
+//    distribution.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+// FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+// COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+// INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+// BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+// CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+// ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //======================================================================
 
 //------------------------------------------------------------------
-// Include Basic uppstart code.
+// Include KickAssembler Basic uppstart code.
 //------------------------------------------------------------------
 .pc =$0801 "Basic Upstart Program"
 :BasicUpstart($4000)
@@ -27,11 +52,13 @@
 //------------------------------------------------------------------
 // SipHash Test
 //
-// Test of the siphash functionality using the two block message
-// in appendix A of the SipHash paper by Aumasson and DJB.
+// Test of the siphash-2-4 functionality using the two block 
+// message in appendix A of the SipHash paper by Aumasson and DJB.
+//
+// Basically, we load the keys, perform initialization, 
+// compression of the two blocks and finalization.
 //------------------------------------------------------------------
 .pc = $4000 "SipHash Test"
-
                         :mov64(k0, test_k0)
                         :mov64(k1, test_k1)
                         jsr initialization
@@ -50,6 +77,7 @@
 //
 // The initialization function of siphash.
 //------------------------------------------------------------------
+.pc = $6000 "SipHash Code"
 initialization:
                         :mov64(v0, v0_initval)
                         :mov64(v1, v1_initval)
@@ -95,7 +123,6 @@ finalization:
 //
 // Performs one SipHash round using the internal variables v0..v3.
 //------------------------------------------------------------------
-//.pc = $6000 "SipHash Round"
 siphash_round:
                         :add64(v0, v1)
                         :rol13(v1)
@@ -114,7 +141,6 @@ siphash_round:
                         :xor64(v1, v2)
                         :rol32(v2)
                         :xor64(v3, v0)
-                                          
                         rts
 
 
@@ -324,7 +350,7 @@ mov64_1:                lda addr1, x
 //------------------------------------------------------------------
 // SipHash state registers and data fields.
 //------------------------------------------------------------------
-.pc = $c000 "Siphash State"
+.pc = $7000 "Siphash State"
 
 v0:          .byte $00, $00, $00, $00, $00, $00, $00, $00
 v1:          .byte $00, $00, $00, $00, $00, $00, $00, $00
@@ -346,7 +372,7 @@ k1:          .byte $00, $00, $00, $00, $00, $00, $00, $00
 m:           .byte $00, $00, $00, $00, $00, $00, $00, $00
 
 
-.pc = $c400 "Siphash Test Data"
+.pc = $8000 "Siphash Test Data"
 
 test_k0:     .byte $07, $06, $05, $04, $03, $02, $01, $00
 test_k1:     .byte $0f, $0e, $0d, $0c, $0b, $0a, $09, $08
