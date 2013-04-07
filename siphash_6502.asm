@@ -48,7 +48,6 @@
 .pc =$0801 "Basic Upstart Program"
 :BasicUpstart($4000)
 
-
 //------------------------------------------------------------------
 // SipHash Test
 //
@@ -78,8 +77,7 @@
 // The initialization function of siphash.
 //------------------------------------------------------------------
 .pc = $6000 "SipHash Code"
-initialization:
-                        :mov64(v0, v0_initval)
+initialization:         :mov64(v0, v0_initval)
                         :mov64(v1, v1_initval)
                         :mov64(v2, v2_initval)
                         :mov64(v3, v3_initval)
@@ -94,9 +92,7 @@ initialization:
 //
 // The compression funnction of siphash.
 //------------------------------------------------------------------
-compression:
-
-                        :xor64(v3, m)
+compression:            :xor64(v3, m)
                         jsr siphash_round
                         jsr siphash_round
                         :xor64(v0, m)
@@ -107,8 +103,7 @@ compression:
 //
 // The finalization funnction of siphash.
 //------------------------------------------------------------------
-finalization:
-                        :xor64(v2, v2_xor)
+finalization:           :xor64(v2, v2_xor)
                         jsr siphash_round
                         jsr siphash_round
                         jsr siphash_round
@@ -123,8 +118,7 @@ finalization:
 //
 // Performs one SipHash round using the internal variables v0..v3.
 //------------------------------------------------------------------
-siphash_round:
-                        :add64(v0, v1)
+siphash_round:          :add64(v0, v1)
                         :rol13(v1)
                         :add64(v2, v3)
                         :rol16(v3)
@@ -142,7 +136,6 @@ siphash_round:
                         :rol32(v2)
                         :xor64(v3, v0)
                         rts
-
 
 //------------------------------------------------------------------
 // rol64bits(addr, bits)
@@ -167,7 +160,6 @@ rol64_1:                lda addr
                         bne rol64_1
 }
 
-
 //------------------------------------------------------------------
 // ror64bits(addr, bits)
 // 
@@ -190,7 +182,6 @@ ror64_1:                lda addr + 7
                         bne ror64_1
 }
 
-
 //------------------------------------------------------------------
 // rol13(addr)
 // 
@@ -203,7 +194,6 @@ ror64_1:                lda addr + 7
                         :rol16(addr)
                         :ror64bits(addr, 3)
 }
-
 
 //------------------------------------------------------------------
 // rol16(addr)
@@ -231,7 +221,6 @@ rol16_1:                lda addr + 2, x
                         sta addr + 7
 }
 
-
 //------------------------------------------------------------------
 // rol17(addr)
 // 
@@ -243,7 +232,6 @@ rol16_1:                lda addr + 2, x
                         :rol16(addr)
                         :rol64bits(addr, 1)
 }
-
 
 //------------------------------------------------------------------
 // rol21(addr)
@@ -277,7 +265,6 @@ rol21_3:                lda tmp, x
                         :ror64bits(addr, 3)
 }
 
-
 //------------------------------------------------------------------
 // rol32(addr)
 // 
@@ -297,7 +284,6 @@ rol32_1:                lda addr, x
                         bpl rol32_1
 }
 
-
 //------------------------------------------------------------------
 // xor64(addr0, addr1)
 // 
@@ -312,7 +298,6 @@ xor64_1:                lda addr0, x
                         dex
                         bpl xor64_1
 }
-
 
 //------------------------------------------------------------------
 // add64(addr0, addr1)
@@ -330,7 +315,6 @@ add64_1:                lda addr0, x
                         bpl add64_1
 }
 
-
 //------------------------------------------------------------------
 // mov64(addr0, addr1)
 // 
@@ -346,12 +330,10 @@ mov64_1:                lda addr1, x
                         bpl mov64_1
 }
 
-
 //------------------------------------------------------------------
 // SipHash state registers and data fields.
 //------------------------------------------------------------------
 .pc = $7000 "Siphash State"
-
 v0:          .byte $00, $00, $00, $00, $00, $00, $00, $00
 v1:          .byte $00, $00, $00, $00, $00, $00, $00, $00
 v2:          .byte $00, $00, $00, $00, $00, $00, $00, $00
@@ -373,13 +355,11 @@ m:           .byte $00, $00, $00, $00, $00, $00, $00, $00
 
 
 .pc = $8000 "Siphash Test Data"
-
 test_k0:     .byte $07, $06, $05, $04, $03, $02, $01, $00
 test_k1:     .byte $0f, $0e, $0d, $0c, $0b, $0a, $09, $08
 
 m0:          .byte $07, $06, $05, $04, $03, $02, $01, $00
 m1:          .byte $0f, $0e, $0d, $0c, $0b, $0a, $09, $08
-
 
 //======================================================================
 // EOF siphash_6502.asm
