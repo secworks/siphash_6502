@@ -7,9 +7,6 @@
 //
 // Build:
 // java -jar KickAss.jar siphash_6502.asm
-// 
-// Run:
-// ./x64 siphash_6502.prg
 //
 //
 // Copyright (c) 2013, Secworks Sweden AB
