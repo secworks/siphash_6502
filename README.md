@@ -30,6 +30,10 @@ faster. Alternatively, by changing the macros into subroutines that are
 reused, the implemenation could be much smaller. This version is just a
 proof of concept.
 
+The current implement performs SipHash compression in 4750 cycles or
+about 520 cycles/Byte. Total number of cycles for a single block message
+is about 15000 cycles.
+
 
 ## TODOs ##
 
