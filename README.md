@@ -1,5 +1,7 @@
 # SipHash Core #
 
+(This repo has been moved from Gitorious.)
+
 ## Introduction ##
 
 This is an implementation of the SipHash [1] keyed hash function in MOS
