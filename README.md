@@ -20,7 +20,7 @@ processing by calling finalization. The resulting message digest will be
 in the v0 register.
 
 
-## Implementation notes ## 
+## Implementation notes ##
 
 The complete code for SipHash requires 677 Bytes. Of these 407 comprises
 the SipHash round operation. The SipHash function uses 103 Bytes for
@@ -53,6 +53,4 @@ is about 15000 cycles.
 [1] J-P. Aumasson, D. J. Bernstein. SipHash: a fast short-input PRF.
 
   - SipHash Project: https://131002.net/siphash/
-  - Siphash Paper: https://131002.net/siphash/siphash.pdf        
-
-
+  - Siphash Paper: https://131002.net/siphash/siphash.pdf
